@@ -1,9 +1,10 @@
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.serializers import ProductSerializer, BucketListSerializer, BucketUpdateSerializer
+from api.serializers import ProductSerializer, BucketSerializer
 from bucket.models import Bucket
 from products.models import Product
 
@@ -22,16 +23,9 @@ class ProductDetail(generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication,)
 
 
-class BucketList(generics.ListAPIView):
+class BucketCreate(generics.ListCreateAPIView):
     queryset = Bucket.objects.all()
-    serializer_class = BucketListSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
-
-
-class BucketUpdate(generics.RetrieveUpdateAPIView):
-    queryset = Bucket.objects.all()
-    serializer_class = BucketUpdateSerializer
+    serializer_class = BucketSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
 

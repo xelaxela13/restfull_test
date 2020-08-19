@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': config('DB_NAME', default='db_name'),
         'USER': config('DB_USER', default='db_user'),
         'HOST': config('DB_HOST', default='db_host'),
-        'PORT': config('DB_PORT', default=5432),
+        'PORT': 5432,
         'PASSWORD': config('DB_PASSWORD', default='test')
     }
 }
