@@ -1,12 +1,23 @@
-from rest_framework import generics, status
+from django.db.models import Sum, F
+from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.serializers import ProductSerializer, BucketSerializer
+from api.serializers import ProductSerializer, BucketSerializer, BucketUpdateSerializer
 from bucket.models import Bucket
 from products.models import Product
+
+
+class BucketForUserMixin:
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        kwargs['request_user'] = self.request.user
+        return serializer_class(*args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user_id=self.request.user.id)
 
 
 class ProductsList(generics.ListAPIView):
@@ -23,17 +34,35 @@ class ProductDetail(generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication,)
 
 
-class BucketCreate(generics.ListCreateAPIView):
+class BucketCreate(BucketForUserMixin, generics.ListCreateAPIView):
     queryset = Bucket.objects.all()
     serializer_class = BucketSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.filter(user_id=self.request.user.id)
-
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
         kwargs['request_user'] = self.request.user
         return serializer_class(*args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        data = {
+            'products': serializer.data,
+            'amount': serializer.instance.aggregate(total=Sum(F('product__price') * F('count')))
+        }
+        return Response(data)
+
+
+class BucketDestroy(BucketForUserMixin, generics.UpdateAPIView, generics.DestroyAPIView):
+    queryset = Bucket.objects.all()
+    serializer_class = BucketUpdateSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
