@@ -9,3 +9,5 @@ pytest-factoryboy
 pytest-mock
 ipdb
 python-decouple
+python-memcached
+requests

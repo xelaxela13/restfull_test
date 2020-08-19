@@ -11,7 +11,7 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    price = models.PositiveSmallIntegerField()
+    price = models.DecimalField(decimal_places=2, max_digits=6)
     category = models.ManyToManyField(Category)
 
     def __str__(self):

@@ -2,12 +2,20 @@ import factory
 import pytest
 from string import ascii_letters, digits
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
 from faker import Faker
 from faker.providers import BaseProvider
 from random import choice
 from pytest_factoryboy import register
 
 fake = Faker()
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.fixture(scope='session')
+def django_db_setup(django_db_setup, django_db_blocker):
+    with django_db_blocker.unblock():
+        call_command('loaddata', 'fixture.json')
 
 
 class MyProvider(BaseProvider):
