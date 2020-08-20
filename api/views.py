@@ -1,5 +1,8 @@
 from django.db.models import Sum, F, DecimalField
 from rest_framework import generics, status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
+
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -15,6 +18,10 @@ class ProductsList(generics.ListAPIView):
     serializer_class = ProductSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ['price', 'category__name']
+    ordering_fields = ['price', ]
+    search_fields = ['name', 'description']
 
 
 class ProductDetail(generics.RetrieveAPIView):
@@ -51,7 +58,7 @@ class BucketAPIView(generics.ListCreateAPIView):
         data = {
             'products': serializer.data,
             'amount': serializer.instance.aggregate(total=Sum(F('product__price') * F('count'),
-                                                    output_field=DecimalField(decimal_places=2)))
+                                                              output_field=DecimalField(decimal_places=2)))
         }
         return Response(data)
 
