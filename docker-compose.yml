@@ -37,6 +37,7 @@ services:
       - node-modules:${PROJECT_ROOT}/node_modules
     ports:
       - "3000:3000"
+    stdin_open: true
 volumes:
   postgres_data: {}
   node-modules: {}
