@@ -1,0 +1,13 @@
+FROM node
+
+ENV PROJECT_ROOT /home/restfull
+ENV PATH $PATH:$PROJECT_ROOT
+
+WORKDIR $PROJECT_ROOT
+#COPY package.json $PROJECT_ROOT
+COPY . $PROJECT_ROOT
+
+#RUN npm install
+
+#EXPOSE 3000
+#CMD ["npm", "start"]

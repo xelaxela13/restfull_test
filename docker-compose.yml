@@ -1,6 +1,17 @@
 version: '3.1'
 
 services:
+  backend:
+    restart: always
+    build: ./backend
+    volumes:
+      - ./backend:${PROJECT_ROOT}
+    ports:
+      - ${UWSGI_PORT_RANGE}:${UWSGI_PORT_RANGE}
+    command: python manage.py runserver 0:${UWSGI_PORT}
+    depends_on:
+      - postgres
+      - memcached
   postgres:
     image: postgres:latest
     restart: unless-stopped
@@ -18,5 +29,14 @@ services:
       options:
         max-size: "10m"
         max-file: "2"
+  frontend:
+    build: ./frontend
+#    command: []
+    volumes:
+      - ./frontend:${PROJECT_ROOT}
+      - node-modules:${PROJECT_ROOT}/node_modules
+    ports:
+      - "3000:3000"
 volumes:
   postgres_data: {}
+  node-modules: {}
