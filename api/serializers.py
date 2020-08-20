@@ -34,8 +34,7 @@ class BucketSerializer(serializers.ModelSerializer):
                 self.instance = Bucket.objects.get(product_id=product.id)
             except Bucket.DoesNotExist:
                 pass
-        if not self.instance:
-            attrs.update({'user': self.request_user})
+        attrs.update({'user': self.request_user})
         if not count or count == 0:
             attrs['count'] = count = 1
         if count and count > 5:
