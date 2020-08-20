@@ -12,3 +12,4 @@ python-decouple
 python-memcached
 requests
 django-filter
+djangorestframework-simplejwt

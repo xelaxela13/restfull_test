@@ -135,3 +135,8 @@ CACHES = {
         'TIMEOUT': 60 * 60,  # 1h,
     }
 }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
