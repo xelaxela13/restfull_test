@@ -8,7 +8,7 @@ RUN CI=true
 #COPY package.json $PROJECT_ROOT
 COPY . $PROJECT_ROOT
 
-#RUN npm install
+RUN npm install
 
 EXPOSE 3000
-#CMD ["npm", "start"]
+CMD ["npm", "start"]

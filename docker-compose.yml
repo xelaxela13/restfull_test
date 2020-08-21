@@ -31,12 +31,12 @@ services:
         max-file: "2"
   frontend:
     build: ./frontend
-#    command: []
+    command: ["npm", "start"]
     volumes:
       - ./frontend:${PROJECT_ROOT}
       - node-modules:${PROJECT_ROOT}/node_modules
     ports:
-      - "3000:3000"
+      - "3001:3000"
     stdin_open: true
 volumes:
   postgres_data: {}

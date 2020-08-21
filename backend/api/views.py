@@ -4,7 +4,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from rest_framework.views import APIView
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -17,7 +16,6 @@ class ProductsList(generics.ListAPIView):
     queryset = Product.objects.exclude(price__lte=0)
     serializer_class = ProductSerializer
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = ['price', 'category__name']
     ordering_fields = ['price', ]
@@ -28,14 +26,12 @@ class ProductDetail(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
 
 
 class BucketAPIView(generics.ListCreateAPIView):
     queryset = Bucket.objects.all()
     serializer_class = BucketSerializer
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
@@ -67,12 +63,10 @@ class BucketDestroy(generics.DestroyAPIView):
     queryset = Bucket.objects.all()
     serializer_class = BucketDestroySerializer
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
 
 
 class BucketClear(APIView):
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
 
     def delete(self, request, *args, **kwargs):
         Bucket.objects.filter(user_id=request.user.id).delete()
