@@ -6,6 +6,8 @@ services:
     build: ./backend
     volumes:
       - ./backend:${PROJECT_ROOT}
+    expose:
+      - ${UWSGI_PORT}
     ports:
       - ${UWSGI_PORT_RANGE}:${UWSGI_PORT_RANGE}
     command: python manage.py runserver 0:${UWSGI_PORT}
@@ -36,8 +38,16 @@ services:
       - ./frontend:${PROJECT_ROOT}
       - node-modules:${PROJECT_ROOT}/node_modules
     ports:
-      - "3001:3000"
+      - ${FRONTEND_PORT}:3000
     stdin_open: true
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+    - ${NGINX_PORT}:80
+    volumes:
+    - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 volumes:
   postgres_data: {}
   node-modules: {}

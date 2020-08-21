@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import axios from "axios";
+
 
 class Products extends Component {
 
@@ -13,7 +15,14 @@ class Products extends Component {
 
     componentDidMount() {
         const url = 'http://localhost:8500/products/'
-        fetch(url)
+        axios.get(url,
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Access-Control-Allow-Origin': '*',
+                    'Authorization': 'Bearer '
+                }
+            })
             .then(res => res.json())
             .then(
                 (result) => {
@@ -39,13 +48,15 @@ class Products extends Component {
             return <div>Загрузка...</div>;
         } else {
             return (
-                <ul>
-                    {items.map(item => (
-                        <li key={item.name}>
-                            {item.name} {item.price}
-                        </li>
-                    ))}
-                </ul>
+                <div className="col-12">
+                    <ul>
+                        {items.map(item => (
+                            <li key={item.name}>
+                                {item.name} {item.price}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             );
         }
     }
