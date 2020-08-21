@@ -6,6 +6,7 @@ RUN set -ex \
     && apk add --no-cache --virtual .build-deps \
        gcc \
        libc-dev \
+       libffi-dev \
        postgresql-dev \
        postgresql-client \
     && apk add --no-cache \

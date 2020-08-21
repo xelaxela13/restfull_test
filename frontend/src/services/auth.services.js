@@ -10,16 +10,9 @@ class AuthService {
                     email,
                     password,
                 },
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Access-Control-Allow-Origin': '*'
-                    }
-                }
             )
             .then(response => {
-                debugger
-                if (response.data.accessToken) {
+                if (response.data.access) {
                     localStorage.setItem("user", JSON.stringify(response.data));
                 }
 

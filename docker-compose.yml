@@ -10,6 +10,7 @@ services:
       - ${UWSGI_PORT}
     ports:
       - ${UWSGI_PORT_RANGE}:${UWSGI_PORT_RANGE}
+#    command: daphne project.asgi:application -b 0.0.0.0 -p ${UWSGI_PORT}
     command: python manage.py runserver 0:${UWSGI_PORT}
     depends_on:
       - postgres

@@ -4,8 +4,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from rest_framework.views import APIView
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from api.serializers import ProductSerializer, BucketSerializer, BucketDestroySerializer
 from bucket.models import Bucket
@@ -16,6 +18,7 @@ class ProductsList(generics.ListAPIView):
     queryset = Product.objects.exclude(price__lte=0)
     serializer_class = ProductSerializer
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = ['price', 'category__name']
     ordering_fields = ['price', ]
@@ -26,12 +29,14 @@ class ProductDetail(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
 
 
 class BucketAPIView(generics.ListCreateAPIView):
     queryset = Bucket.objects.all()
     serializer_class = BucketSerializer
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
@@ -63,10 +68,12 @@ class BucketDestroy(generics.DestroyAPIView):
     queryset = Bucket.objects.all()
     serializer_class = BucketDestroySerializer
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
 
 
 class BucketClear(APIView):
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication, SessionAuthentication)
 
     def delete(self, request, *args, **kwargs):
         Bucket.objects.filter(user_id=request.user.id).delete()
