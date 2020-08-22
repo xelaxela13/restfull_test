@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from "./components/login";
 import AuthService from "./services/auth.services";
 import Products from "./components/products";
+import Bucket from "./components/bucket";
 
 
 class App extends Component {
@@ -52,6 +53,13 @@ class App extends Component {
                                 </Link>
                             </li>
                         )}
+                        {currentUser && (
+                            <li className="nav-item">
+                                <Link to={"/bucket"} className="nav-link">
+                                    Bucket
+                                </Link>
+                            </li>
+                        )}
                     </div>
 
                     {currentUser ? (
@@ -78,6 +86,7 @@ class App extends Component {
                         <Switch>
                             <Route exact path="/login" component={Login}/>
                             <Route exact path="/products" component={Products}/>
+                            <Route exact path="/bucket" component={Bucket}/>
                         </Switch>
                     </div>
                 </div>

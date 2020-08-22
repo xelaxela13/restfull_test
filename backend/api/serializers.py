@@ -11,10 +11,13 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class BucketSerializer(serializers.ModelSerializer):
+    product_name = serializers.ReadOnlyField()
+    product_price = serializers.ReadOnlyField()
+
     class Meta:
         model = Bucket
         exclude = ()
-        read_only_fields = ('user',)
+        read_only_fields = ('user', 'product_name', 'product_price')
 
     def __init__(self, *args, **kwargs):
         self.request_user = kwargs.pop('request_user')

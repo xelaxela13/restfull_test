@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import authHeader from "../services/auth.header";
+import AddToBucket from "./addToBucketButton";
 
 
 class Products extends Component {
@@ -16,7 +17,7 @@ class Products extends Component {
          this.handleRequest = this.handleRequest.bind(this);
          this.updateOrdering = this.updateOrdering.bind(this);
          this.updateSearch = this.updateSearch.bind(this);
-         this.order = React.createRef()
+         this.order = React.createRef();
          this.search = React.createRef()
     }
 
@@ -84,6 +85,7 @@ class Products extends Component {
                                 <h5 className="card-title">{item.name}</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">{item.price}</h6>
                                 <p className="card-text">{item.description}</p>
+                                <AddToBucket product_id={item.id}/>
                             </div>
                         </div>
                     ))}
