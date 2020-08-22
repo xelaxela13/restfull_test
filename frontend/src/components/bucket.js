@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import authHeader from "../services/auth.header";
+import DeleteButton from "./deleteButton";
 
 
 class Bucket extends Component {
@@ -61,6 +62,7 @@ class Bucket extends Component {
                                 <h5 className="card-title">{item.product_name}</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">{item.product_price}</h6>
                                 <h6 className="card-subtitle mb-2 text-muted">{item.count}</h6>
+                                <DeleteButton product_id={item.id} />
                             </div>
                         </div>
                     ))}

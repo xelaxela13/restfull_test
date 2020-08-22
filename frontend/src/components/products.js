@@ -85,7 +85,7 @@ class Products extends Component {
                                 <h5 className="card-title">{item.name}</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">{item.price}</h6>
                                 <p className="card-text">{item.description}</p>
-                                <AddToBucket product_id={item.id}/>
+                                <AddToBucket key={item.id} product_id={item.id}/>
                             </div>
                         </div>
                     ))}

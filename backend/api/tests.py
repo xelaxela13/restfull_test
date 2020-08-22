@@ -10,7 +10,7 @@ from products.models import Product
 def test_products(user):
     client = APIClient()
     response = client.get(reverse('products'))
-    assert response.status_code == 403
+    assert response.status_code == 401
     client.login(email=user.email, password='1234567890')
     response = client.get(reverse('products'))
     assert response.status_code == 200
@@ -24,7 +24,7 @@ def test_products(user):
 def test_bucket(user):
     client = APIClient()
     response = client.get(reverse('bucket'))
-    assert response.status_code == 403
+    assert response.status_code == 401
     client.login(email=user.email, password='1234567890')
     response = client.get(reverse('bucket'))
     assert response.status_code == 200
@@ -35,23 +35,26 @@ def test_bucket(user):
     zero_product = Product.objects.filter(price=0).first()
 
     # add products
-    response = client.post(reverse('bucket'), {'count': 3, 'product': first_product.id})
+    response = client.post(reverse('bucket'), {'product': first_product.id})
     assert response.status_code == 201
 
-    response = client.post(reverse('bucket'), {'count': 5, 'product': last_product.id})
+    response = client.post(reverse('bucket'), {'product': last_product.id})
     assert response.status_code == 201
-    assert response.json()['count'] == 5
     assert response.json()['product'] == 5
 
     # add zero products
-    response = client.post(reverse('bucket'), {'count': 3, 'product': zero_product.id})
+    response = client.post(reverse('bucket'), {'product': zero_product.id})
     assert response.status_code == 400
     assert response.json()['non_field_errors'] == ['Product price must be more than zero']
 
-    # add count more than available
-    response = client.post(reverse('bucket'), {'count': 7, 'product': last_product.id})
-    assert response.status_code == 400
-    assert response.json()['non_field_errors'] == ['Product count should be maximum 5 qty']
+    # add count more than available, we already have one product with such ID in bucket
+    for i in range(5, 1):
+        response = client.post(reverse('bucket'), {'product': last_product.id})
+        if i < 5:
+            assert response.status_code == 201
+        else:
+            assert response.status_code == 400
+            assert response.json()['non_field_errors'] == ['Product count should be maximum 5 qty']
 
     # check products count in bucket
     response = client.get(reverse('bucket'))

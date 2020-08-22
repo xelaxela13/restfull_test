@@ -3,14 +3,14 @@ import axios from "axios";
 import authHeader from "../services/auth.header";
 
 
-class AddToBucket extends Component {
+class DeleteButton extends Component {
     constructor(props) {
         super(props);
         this.state = {
             error: null,
             isLoaded: false,
             items: [],
-            add: false,
+            delete: false,
             product_id: props.product_id
         };
         this.handleRequest = this.handleRequest.bind(this);
@@ -18,8 +18,8 @@ class AddToBucket extends Component {
     }
 
     handleRequest() {
-        const url = 'http://localhost:9999/api/bucket/';
-        axios.post(url, {'product': this.state.product_id, 'count': this.state.product_count}, {headers: authHeader()})
+        const url = 'http://localhost:9999/api/bucket/' + this.state.product_id;
+        axios.delete(url, {headers: authHeader()})
             .then(
                 (result) => {
                     this.setState({
@@ -37,22 +37,22 @@ class AddToBucket extends Component {
     }
 
     handleSubmit() {
-        this.setState({add: true});
+        this.setState({delete: true});
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.state.add && this.handleRequest()
+        this.state.delete && this.handleRequest()
     }
 
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <button className="btn btn-primary" type="submit" id={"product_" + this.state.product_id}>
-                    Add
+                <button className="btn btn-danger" type="submit">
+                    Delete
                 </button>
             </form>
         );
     }
 }
 
-export default AddToBucket;
+export default DeleteButton;

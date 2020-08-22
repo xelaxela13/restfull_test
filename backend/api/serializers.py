@@ -38,9 +38,13 @@ class BucketSerializer(serializers.ModelSerializer):
             except Bucket.DoesNotExist:
                 pass
         attrs.update({'user': self.request_user})
-        if not count or count == 0:
-            attrs['count'] = count = 1
-        if count and count > 5:
+        if self.instance and not count:
+            attrs['count'] = self.instance.count + 1
+        elif self.instance and count:
+            attrs['count'] = count
+        else:
+            attrs['count'] = 1
+        if attrs['count'] > 5:
             raise serializers.ValidationError('Product count should be maximum 5 qty')
         if product.price == 0:
             raise serializers.ValidationError('Product price must be more than zero')
