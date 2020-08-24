@@ -3,28 +3,25 @@ import axios from "axios";
 import authHeader from "../services/auth.header";
 
 
-class AddToBucket extends Component {
+class ClearButton extends Component {
     constructor(props) {
         super(props);
         this.state = {
             error: null,
             isLoaded: false,
-            items: [],
-            add: false,
-            product_id: props.product_id
+            clear: false,
         };
         this.handleRequest = this.handleRequest.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleRequest() {
-        const url = 'http://localhost:9999/api/bucket/';
-        axios.post(url, {'product': this.state.product_id}, {headers: authHeader()})
+        const url = 'http://localhost:9999/api/bucket/clear';
+        axios.delete(url, {headers: authHeader()})
             .then(
                 (result) => {
                     this.setState({
                         isLoaded: true,
-                        items: result.data,
                     });
                 },
                 (error) => {
@@ -37,22 +34,22 @@ class AddToBucket extends Component {
     }
 
     handleSubmit() {
-        this.setState({add: true});
+        this.setState({clear: true});
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.state.add && this.handleRequest()
+        this.state.clear && this.handleRequest()
     }
 
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <button className="btn btn-primary" type="submit" id={"product_" + this.state.product_id}>
-                    Add
+                <button className="btn btn-danger" type="submit">
+                    Clear bucket
                 </button>
             </form>
         );
     }
 }
 
-export default AddToBucket;
+export default ClearButton;

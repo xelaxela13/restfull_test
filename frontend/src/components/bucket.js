@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import axios from "axios";
 import authHeader from "../services/auth.header";
 import DeleteButton from "./deleteButton";
+import ClearButton from "./clearButton";
+import UpdateBucket from "./updateBucketButton";
 
 
 class Bucket extends Component {
@@ -56,12 +58,16 @@ class Bucket extends Component {
             return (
                 <div className="col-12">
                     <h5>{amount.total}</h5>
+                    <p><ClearButton/></p>
                     {items.map(item => (
                         <div key={item.id} className="card m-3">
                             <div className="card-body">
                                 <h5 className="card-title">{item.product_name}</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">{item.product_price}</h6>
-                                <h6 className="card-subtitle mb-2 text-muted">{item.count}</h6>
+                                {item.product_category_name_list.map(category_name=>(
+                                    <p>{category_name}</p>
+                                ))}
+                                <UpdateBucket product_id={item.product} product_count={item.count}/>
                                 <DeleteButton product_id={item.id} />
                             </div>
                         </div>

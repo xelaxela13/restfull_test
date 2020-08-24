@@ -15,3 +15,7 @@ class Bucket(models.Model):
     @property
     def product_price(self):
         return self.product.price
+
+    @property
+    def product_category_name_list(self):
+        return self.product.category.values_list('name', flat=True)

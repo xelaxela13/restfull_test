@@ -16,3 +16,7 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.price}'
+
+    @property
+    def category_name_list(self):
+        return self.category.values_list('name', flat=True)

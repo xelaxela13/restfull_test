@@ -5,19 +5,23 @@ from products.models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category_name_list = serializers.ReadOnlyField()
+
     class Meta:
         model = Product
         exclude = ()
+        read_only_fields = ('category_name_list',)
 
 
 class BucketSerializer(serializers.ModelSerializer):
     product_name = serializers.ReadOnlyField()
     product_price = serializers.ReadOnlyField()
+    product_category_name_list = serializers.ReadOnlyField()
 
     class Meta:
         model = Bucket
         exclude = ()
-        read_only_fields = ('user', 'product_name', 'product_price')
+        read_only_fields = ('user', 'product_name', 'product_price', 'product_category_name_list')
 
     def __init__(self, *args, **kwargs):
         self.request_user = kwargs.pop('request_user')
@@ -27,6 +31,7 @@ class BucketSerializer(serializers.ModelSerializer):
         product = attrs.get('product')
         count = attrs.get('count')
         bucket_id = self.initial_data.get('id')
+        # its not required request to DB, I know about this, maybe in real project this is not good solutions
         if bucket_id:
             try:
                 self.instance = Bucket.objects.get(id=bucket_id)
