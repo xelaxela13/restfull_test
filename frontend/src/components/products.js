@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import authHeader from "../services/auth.header";
-import AddToBucket from "./addToBucketButton";
+import AddToBucket from "./addButton";
 
 
 class Products extends Component {

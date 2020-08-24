@@ -3,7 +3,7 @@ import axios from "axios";
 import authHeader from "../services/auth.header";
 import DeleteButton from "./deleteButton";
 import ClearButton from "./clearButton";
-import UpdateBucket from "./updateBucketButton";
+import UpdateBucket from "./updateButton";
 
 
 class Bucket extends Component {

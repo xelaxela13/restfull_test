@@ -6,6 +6,7 @@ import Login from "./components/login";
 import AuthService from "./services/auth.services";
 import Products from "./components/products";
 import Bucket from "./components/bucket";
+import Home from "./components/home";
 
 
 class App extends Component {
@@ -84,6 +85,7 @@ class App extends Component {
                 <div className="container">
                     <div className="row py-5">
                         <Switch>
+                            <Route exact path="/" component={Home}/>
                             <Route exact path="/login" component={Login}/>
                             <Route exact path="/products" component={Products}/>
                             <Route exact path="/bucket" component={Bucket}/>
