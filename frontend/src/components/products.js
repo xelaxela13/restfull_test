@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import {Link} from 'react-router-dom';
 import authHeader from "../services/auth.header";
 import AddToBucket from "./addButton";
 
@@ -88,7 +89,8 @@ class Products extends Component {
                                 {item.category_name_list.map(category_name=>(
                                     <p>{category_name}</p>
                                 ))}
-                                <AddToBucket key={item.id} product_id={item.id}/>
+                                <AddToBucket product_id={item.id}/>
+                                <Link to={{pathname: "/product/"+item.id, state: {product_id: item.id}}}>Detail</Link>
                             </div>
                         </div>
                     ))}

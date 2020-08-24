@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from "./components/login";
 import AuthService from "./services/auth.services";
 import Products from "./components/products";
+import Product from "./components/product";
 import Bucket from "./components/bucket";
 import Home from "./components/home";
 
@@ -88,6 +89,7 @@ class App extends Component {
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/login" component={Login}/>
                             <Route exact path="/products" component={Products}/>
+                            <Route path="/product/" component={Product}/>
                             <Route exact path="/bucket" component={Bucket}/>
                         </Switch>
                     </div>
