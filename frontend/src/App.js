@@ -89,7 +89,7 @@ class App extends Component {
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/login" component={Login}/>
                             <Route exact path="/products" component={Products}/>
-                            <Route path="/product/" component={Product}/>
+                            <Route path="/product/:id" component={Product}/>
                             <Route exact path="/bucket" component={Bucket}/>
                         </Switch>
                     </div>

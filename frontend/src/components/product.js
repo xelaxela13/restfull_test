@@ -12,7 +12,7 @@ class Product extends Component {
             error: null,
             isLoaded: false,
             items: [],
-            ...props.location.state
+            product_id: props.match.params.id
         };
         this.handleRequest = this.handleRequest.bind(this);
     }

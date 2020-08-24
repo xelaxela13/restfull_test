@@ -29,7 +29,7 @@ class Products extends Component {
         this.setState({params: '?search='+this.search.current.value})
     }
     handleRequest(params) {
-        const url = 'http://localhost:9999/api/products/'+params;
+        const url = `http://localhost:9999/api/products/${params}`;
         axios.get(url, {headers: authHeader()})
             .then(
                 (result) => {
@@ -90,7 +90,7 @@ class Products extends Component {
                                     <p>{category_name}</p>
                                 ))}
                                 <AddToBucket product_id={item.id}/>
-                                <Link to={{pathname: "/product/"+item.id, state: {product_id: item.id}}}>Detail</Link>
+                                <Link to={"/product/"+item.id}>Detail</Link>
                             </div>
                         </div>
                     ))}

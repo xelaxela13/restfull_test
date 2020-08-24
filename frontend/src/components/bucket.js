@@ -22,7 +22,7 @@ class Bucket extends Component {
     }
 
     handleRequest(params) {
-        const url = 'http://localhost:9999/api/bucket/'+params;
+        const url = `http://localhost:9999/api/bucket/${params}`;
         axios.get(url, {headers: authHeader()})
             .then(
                 (result) => {

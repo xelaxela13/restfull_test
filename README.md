@@ -10,3 +10,5 @@ docker exec -it restfull_backend_1 ./manage.py createsuperuser
 docker exec -it restfull_backend_1 ./manage.py loaddata fixture.json
 
 localhost:9999/
+
+run tests: docker exec -it restfull_backend_1 pytest -s -v -x api

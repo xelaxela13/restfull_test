@@ -6,6 +6,9 @@ class Home extends Component {
     render() {
         return (
             <div className="col-12">
+                <div className="alert alert-danger">
+                    Please note: only base functionality on frontend, without notifications, validations, messages or other good things ))
+                </div>
                 <div className="stackedit__html"><h1 id="тестовое-задание">Тестовое задание</h1>
                     <p>Необходимо разработать базовый REST-сервис для корзины заказов.</p>
                     <h2 id="описание-бекенда">Описание бекенда</h2>

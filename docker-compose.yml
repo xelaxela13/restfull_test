@@ -6,6 +6,7 @@ services:
     build: ./backend
     volumes:
       - ./backend:${PROJECT_ROOT}
+      - ./.env:${PROJECT_ROOT}/.env
     expose:
       - ${UWSGI_PORT}
     ports:
