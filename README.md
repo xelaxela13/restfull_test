@@ -11,4 +11,7 @@ docker exec -it restfull_backend_1 ./manage.py loaddata fixture.json
 
 localhost:9999/
 
+user: user@mail.com
+password: Zq@7@XnfJCWurSU
+
 run tests: docker exec -it restfull_backend_1 pytest -s -v -x api
