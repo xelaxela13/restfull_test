@@ -1,9 +1,10 @@
 import React, {Component} from "react";
+import {instanceOf} from 'prop-types';
+import {withCookies, Cookies} from 'react-cookie';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
-import AuthService from "../services/auth.services";
+import login from "../services/auth.services";
 
 const required = value => {
     if (!value) {
@@ -15,13 +16,16 @@ const required = value => {
     }
 };
 
-export default class Login extends Component {
+class Login extends Component {
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
+
     constructor(props) {
         super(props);
         this.handleLogin = this.handleLogin.bind(this);
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
-
         this.state = {
             email: "",
             password: "",
@@ -51,11 +55,19 @@ export default class Login extends Component {
         });
 
         this.form.validateAll();
-
+        let {cookies} = this.props;
         if (this.checkBtn.context._errors.length === 0) {
-            AuthService.login(this.state.email, this.state.password).then(
-                () => {
-                    window.location.href = '/';
+            login(this.state.email, this.state.password).then(
+                (res) => {
+                    if (res.access) {
+                        cookies.set('usertoken', res.access);
+                        window.location.href = '/';
+                    } else {
+                        this.setState({
+                            loading: false,
+                            message: 'Login error! Token is empty!'
+                        });
+                    }
                 },
                 error => {
                     const resMessage =
@@ -143,3 +155,5 @@ export default class Login extends Component {
         );
     }
 }
+
+export default withCookies(Login);

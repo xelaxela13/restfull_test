@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {Switch, Route, Link} from 'react-router-dom';
+import {instanceOf} from 'prop-types';
+import {withCookies, Cookies} from 'react-cookie';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from "./components/login";
-import AuthService from "./services/auth.services";
 import Products from "./components/products";
 import Product from "./components/product";
 import Bucket from "./components/bucket";
@@ -11,32 +12,35 @@ import Home from "./components/home";
 
 
 class App extends Component {
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
 
     constructor(props) {
         super(props);
         this.logOut = this.logOut.bind(this);
-
         this.state = {
-            currentUser: undefined
+            userToken: undefined
         };
     }
 
     componentDidMount() {
-        const user = AuthService.getCurrentUser();
-
-        if (user) {
+        let { cookies } = this.props;
+        let usertoken = cookies.get('usertoken')
+        if (usertoken) {
             this.setState({
-                currentUser: user,
+                userToken: usertoken,
             });
         }
     }
 
     logOut() {
-        AuthService.logout();
+        let { cookies } = this.props;
+        cookies.remove('usertoken')
     }
 
     render() {
-        const {currentUser} = this.state;
+        const {userToken} = this.state;
 
         return (
             <div>
@@ -48,14 +52,14 @@ class App extends Component {
                             </Link>
                         </li>
 
-                        {currentUser && (
+                        {userToken && (
                             <li className="nav-item">
                                 <Link to={"/products"} className="nav-link">
                                     Products
                                 </Link>
                             </li>
                         )}
-                        {currentUser && (
+                        {userToken && (
                             <li className="nav-item">
                                 <Link to={"/bucket"} className="nav-link">
                                     Bucket
@@ -64,7 +68,7 @@ class App extends Component {
                         )}
                     </div>
 
-                    {currentUser ? (
+                    {userToken ? (
                         <div className="navbar-nav ml-auto">
                             <li className="nav-item">
                                 <a href="/login" className="nav-link" onClick={this.logOut}>
@@ -99,4 +103,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default withCookies(App);
