@@ -3,7 +3,7 @@ from accounts.models import User
 from products.models import Product
 
 
-class Bucket(models.Model):
+class BucketItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     count = models.PositiveSmallIntegerField(default=1)
@@ -17,5 +17,5 @@ class Bucket(models.Model):
         return self.product.price
 
     @property
-    def product_category_name_list(self):
-        return self.product.category.values_list('name', flat=True)
+    def product_category(self):
+        return self.product.category.values('pk', 'name')

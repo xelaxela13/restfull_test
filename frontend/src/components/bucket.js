@@ -64,8 +64,8 @@ class Bucket extends Component {
                             <div className="card-body">
                                 <h5 className="card-title">{item.product_name}</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">{item.product_price}</h6>
-                                {item.product_category_name_list.map(category_name=>(
-                                    <p>{category_name}</p>
+                                {item.product_category.map(category=>(
+                                    <p>{category.name}</p>
                                 ))}
                                 <UpdateBucket product_id={item.product} product_count={item.count}/>
                                 <DeleteButton product_id={item.id} />

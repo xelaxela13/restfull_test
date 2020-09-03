@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from bucket.models import Bucket
+from bucket.models import BucketItem
 from products.models import Product
 
 
@@ -73,7 +73,7 @@ def test_bucket(user):
     assert len(response.json()['products']) == 2
 
     # delete product
-    bucket_last_product = Bucket.objects.filter(user_id=user.id).last()
+    bucket_last_product = BucketItem.objects.filter(user_id=user.id).last()
     response = client.delete(reverse('bucket-delete', args=(bucket_last_product.id, )))
     assert response.status_code == 204
     response = client.get(reverse('bucket'))
@@ -84,4 +84,4 @@ def test_bucket(user):
     assert response.status_code == 204
     response = client.get(reverse('bucket'))
     assert len(response.json()['products']) == 0
-    assert not Bucket.objects.filter(user_id=user.id).exists()
+    assert not BucketItem.objects.filter(user_id=user.id).exists()

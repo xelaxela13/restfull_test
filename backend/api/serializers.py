@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from bucket.models import Bucket
+from bucket.models import BucketItem
 from products.models import Product
 
 
@@ -16,12 +16,12 @@ class ProductSerializer(serializers.ModelSerializer):
 class BucketSerializer(serializers.ModelSerializer):
     product_name = serializers.ReadOnlyField()
     product_price = serializers.ReadOnlyField()
-    product_category_name_list = serializers.ReadOnlyField()
+    product_category = serializers.ReadOnlyField()
 
     class Meta:
-        model = Bucket
+        model = BucketItem
         exclude = ()
-        read_only_fields = ('user', 'product_name', 'product_price', 'product_category_name_list')
+        read_only_fields = ('user', 'product_name', 'product_price', 'product_category')
 
     def __init__(self, *args, **kwargs):
         self.request_user = kwargs.pop('request_user')
@@ -34,13 +34,13 @@ class BucketSerializer(serializers.ModelSerializer):
         # its not required request to DB, I know about this, maybe in real project this is not good solutions
         if bucket_id:
             try:
-                self.instance = Bucket.objects.get(id=bucket_id)
-            except Bucket.DoesNotExist:
+                self.instance = BucketItem.objects.get(id=bucket_id)
+            except BucketItem.DoesNotExist:
                 pass
         if self.instance is None:
             try:
-                self.instance = Bucket.objects.get(product_id=product.id)
-            except Bucket.DoesNotExist:
+                self.instance = BucketItem.objects.get(product_id=product.id)
+            except BucketItem.DoesNotExist:
                 pass
         attrs.update({'user': self.request_user})
         if self.instance and not count:
@@ -58,5 +58,5 @@ class BucketSerializer(serializers.ModelSerializer):
 
 class BucketDestroySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Bucket
+        model = BucketItem
         exclude = ()

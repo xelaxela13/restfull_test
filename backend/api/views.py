@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from api.serializers import ProductSerializer, BucketSerializer, BucketDestroySerializer
-from bucket.models import Bucket
+from bucket.models import BucketItem
 from products.models import Product
 
 
@@ -33,7 +33,7 @@ class ProductDetail(generics.RetrieveAPIView):
 
 
 class BucketAPIView(generics.ListCreateAPIView):
-    queryset = Bucket.objects.all()
+    queryset = BucketItem.objects.all()
     serializer_class = BucketSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication, SessionAuthentication)
@@ -59,13 +59,13 @@ class BucketAPIView(generics.ListCreateAPIView):
         data = {
             'products': serializer.data,
             'amount': serializer.instance.aggregate(total=Sum(F('product__price') * F('count'),
-                                                              output_field=DecimalField(decimal_places=2)))
+                                                              output_field=DecimalField(decimal_places=2))) or 0
         }
         return Response(data)
 
 
 class BucketDestroy(generics.DestroyAPIView):
-    queryset = Bucket.objects.all()
+    queryset = BucketItem.objects.all()
     serializer_class = BucketDestroySerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication, SessionAuthentication)
@@ -76,5 +76,5 @@ class BucketClear(APIView):
     authentication_classes = (JWTAuthentication, SessionAuthentication)
 
     def delete(self, request, *args, **kwargs):
-        Bucket.objects.filter(user_id=request.user.id).delete()
+        BucketItem.objects.filter(user_id=request.user.id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
