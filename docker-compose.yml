@@ -50,6 +50,13 @@ services:
     volumes:
     - ./nginx/sites-enabled:/etc/nginx/sites-enabled
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  elasticsearch:
+    image: elasticsearch:7.9.0
+    restart: always
+    ports:
+    - ${ELASTICPORT}:9200
+    environment:
+    - discovery.type=single-node
 volumes:
   postgres_data: {}
   node-modules: {}
